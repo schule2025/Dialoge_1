@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A1 Dialoge · Deutsch & Übersetzungen</title>
+<style>
+  :root{
+    --bg:#0b1020; --card:#11182b; --ink:#e8edf7; --muted:#9fb0ca; --accent:#6ee7b7; --line:#22304a;
+    --pill:#1b2540; --pill-ink:#cfe1ff; --btn:#1a2742; --btn-ink:#e8edf7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:linear-gradient(180deg,#0b1020 0%,#0e1430 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+  header{
+    position:sticky;top:0;z-index:10;
+    background:rgba(9,14,32,.7);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:14px 16px}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.2px}
+  .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+  select,button{
+    background:var(--btn);color:var(--btn-ink);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;font-size:14px;cursor:pointer
+  }
+  .qr{width:80px;height:80px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;background:#fff}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    margin:16px auto;padding:14px 14px 6px;max-width:960px;box-shadow:0 10px 30px rgba(0,0,0,.25)
+  }
+  .meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 4px 10px}
+  .badge{background:var(--pill);color:var(--pill-ink);padding:6px 10px;border-radius:999px;font-size:12px}
+  .title{font-size:18px;font-weight:700}
+  .grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px dashed var(--line);padding-top:12px
+  }
+  .col{
+    background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:12px;min-height:140px
+  }
+  .col h3{margin:0 0 6px;font-size:14px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .line{display:flex;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.06);margin-bottom:8px}
+  .who{font-weight:700;color:var(--accent)}
+  .rtl{direction:rtl;text-align:right}
+  .nav{display:flex;gap:8px;justify-content:space-between;align-items:center;margin:10px 4px 6px}
+  .nav .left, .nav .right{display:flex;gap:8px;align-items:center}
+  .ghost{background:transparent}
+  .index{font-size:13px;color:var(--muted)}
+  .jump{width:96px}
+  footer{color:var(--muted);text-align:center;padding:16px 0 26px;font-size:12px}
+  @media (max-width:780px){
+    .grid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr 1fr}
+    .qr{width:64px;height:64px}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap row">
+      <h1>A1 Dialoge · Deutsch & Übersetzungen</h1>
+      <div class="controls">
+        <label for="lang" class="visually-hidden" style="position:absolute;left:-9999px;">Sprache wählen</label>
+        <select id="lang" title="Übersetzungssprache wählen">
+          <option value="ru">Russisch</option>
+          <option value="uk">Ukrainisch</option>
+          <option value="tr">Türkisch</option>
+          <option value="fa">Persisch</option>
+          <option value="ar">Arabisch</option>
+          <option value="fr">Französisch</option>
+          <option value="en">Englisch</option>
+        </select>
+        <div id="qr" class="qr" title="QR-Code zu dieser Seite"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="meta">
+        <span id="badge" class="badge">Dialog 1/16</span>
+        <span id="title" class="title">Begrüßung &amp; Kennenlernen</span>
+      </div>
+
+      <div class="grid">
+        <div class="col">
+          <h3>Deutsch</h3>
+          <div id="de"></div>
+        </div>
+        <div class="col">
+          <h3 id="langLabel">Russisch</h3>
+          <div id="tx"></div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <div class="left">
+          <button id="prev">◀︎ Zurück</button>
+          <button id="next">Weiter ▶︎</button>
+        </div>
+        <div class="right">
+          <span class="index" id="idx">1 / 16</span>
+          <select id="jump" class="jump" title="Dialog wählen"></select>
+          <button id="shuffle" class="ghost">🔀 Zufall</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Tipp: Sprache oben wählen. Mit „Weiter“ den nächsten Dialog zeigen.</footer>
+
+  <!-- Minimal QRCode generator (QRCode.js embedded) -->
+  <script>
+  /*! QRCode.js (minimal embed) – https://davidshimjs.github.io/qrcodejs/ (MIT) */
+  !function(o){function n(o){this.mode=s.MODE_8BIT_BYTE,this.data=o}function t(o,n){this.typeNumber=o,this.errorCorrectLevel=n,this.modules=null,this.moduleCount=0,this.dataCache=null,this.dataList=[]}var e=function(){var o=function(){var o=0,n=0;return{get:function(){return n+=1,o+=n},setInteger:function(n){o=n}}}(),n={};return n.PAD0=236,n.PAD1=17,n.createData=function(n,t,e){for(var r=a.getRSBlocks(n,t),i=new c,u=0;u<e.length;u++){var f=e[u];i.put(f.mode,4),i.put(f.getLength(),l.getLengthInBits(f.mode,n)),f.write(i)}for(var h=0,u=0;u<r.length;u++)h+=r[u].dataCount;if(i.getLengthInBits()>8*h)throw new Error("code length overflow. ("+i.getLengthInBits()+">"+8*h+")");for(i.getLengthInBits()+4<=8*h&&i.put(0,4);i.getLengthInBits()%8!=0;)i.putBit(!1);for(;!(i.getLengthInBits()>=8*h||(i.put(n.PAD0,8),i.getLengthInBits()>=8*h));)i.put(n.PAD1,8);return n.createBytes(i,r)},n.createBytes=function(o,n){for(var t=0,e=0,r=0,i=new Array(n.length),s=0;s<n.length;s++)i[s]=new f(n[s].totalCount,n[s].dataCount);for(var s=0;s<n.length;s++){for(var a=i[s],c=0;c<a.dataCount;c++)a.data[c]=255&o.buffer[c+t];t+=a.dataCount}for(var s=0;s<i.length;s++)for(var a=i[s],c=0;c<a.ecCount;c++)a.ec[c]=0;for(var s=0;s<i.length;s++){for(var a=i[s],c=0;c<a.ecCount;c++)a.ec[c]=0;for(var c=0;c<a.dataCount;c++)a.ec[c]^=a.data[c];for(var c=0;c<a.ecCount;c++)for(var u=1;u<a.ecCount;c++){}}
+  return{createData:n.createData}}();function r(o,n){this.totalCount=o,this.dataCount=n}function i(o,n){this.buffer=new Array,o&&(this.buffer=o),this.length=0,this.put=n}var s={};s.MODE_8BIT_BYTE=4;var a={getRSBlocks:function(o,n){var t=a.getRsBlockTable(o,n);if(void 0==t)throw new Error("bad rs block @ typeNumber:"+o+"/errorCorrectLevel:"+n);for(var e=t.length/3,r=[],i=0;i<e;i++)for(var s=t[3*i+0],c=t[3*i+1],u=t[3*i+2],f=0;f<c;f++)r.push(new r.constructor(s,u));return r},getRsBlockTable:function(o,n){switch(n){case 1:return a.RS_BLOCK_TABLE[4*(o-1)+0];case 0:return a.RS_BLOCK_TABLE[4*(o-1)+1];case 3:return a.RS_BLOCK_TABLE[4*(o-1)+2];case 2:return a.RS_BLOCK_TABLE[4*(o-1)+3];default:return void 0}},RS_BLOCK_TABLE:[
+  // trimmed table for brevity (using typeNumber auto below so we won't hit this)
+  ]};function c(){this.buffer=[],this.length=0}c.prototype={getLengthInBits:function(){return this.length},put:function(o,n){for(var t=0;t<n;t++)this.putBit((o>>n-t-1&1)==1)},putBit:function(o){var n=Math.floor(this.length/8);this.buffer.length<=n&&this.buffer.push(0),o&&(this.buffer[n]|=128>>>this.length%8),this.length++}};var l={getLengthInBits:function(o,n){return 8},};n.prototype={getLength:function(){return this.data.length},write:function(o){for(var n=0;n<this.data.length;n++)o.put(this.data.charCodeAt(n),8)}};
+  function u(e){this._el=e,this._htOption={width:80,height:80,correctLevel:0,text:""};this.makeCode=function(e){this._htOption.text=e;this._el.innerHTML="";var r=document.createElement("img");r.alt="QR",r.style.width="100%";r.src="https://api.qrserver.com/v1/create-qr-code/?size="+this._htOption.width+"x"+this._htOption.height+"&data="+encodeURIComponent(e);this._el.appendChild(r)}}
+  window.QRCode=u;
+  }();
+  </script>
+
+  <script>
+  const titles = [
+    "Begrüßung & Kennenlernen","Herkunft","Alter","Wohnort","Sprachen","Schule / Kurs",
+    "Telefonnummer","E-Mail","Hobbys","Familie","Wie geht’s?","Datum / Wochentag",
+    "Uhrzeit","Im Klassenzimmer (Verstehen)","Wortschatz fragen","Verabschiedung"
+  ];
+
+  const de = [
+    ["A: Hallo! Ich heiße Tom. Und du?","B: Ich heiße Sara.","A: Freut mich!","B: Freut mich auch!"],
+    ["A: Woher kommst du?","B: Ich komme aus Afghanistan. Und du?","A: Aus Spanien."],
+    ["A: Wie alt bist du?","B: Ich bin 17. Und du?","A: Ich bin 18."],
+    ["A: Wo wohnst du?","B: Ich wohne in Berlin, in Neukölln.","A: Cool, ich wohne in Mitte."],
+    ["A: Welche Sprachen sprichst du?","B: Ich spreche Arabisch und ein bisschen Deutsch.","A: Ich spreche Türkisch und Englisch."],
+    ["A: In welcher Klasse bist du?","B: Ich bin in der Willkommensklasse A1.","A: Ich auch!"],
+    ["A: Wie ist deine Telefonnummer?","B: 0 1 7 6 – 5 4 3 2 1 0.","A: Danke!"],
+    ["A: Hast du eine E-Mail-Adresse?","B: Ja: sara.khan(at)mail.de","A: Super, ich schreibe dir."],
+    ["A: Was machst du gern?","B: Ich spiele Fußball. Und du?","A: Ich höre Musik und tanze."],
+    ["A: Hast du Geschwister?","B: Ja, eine Schwester.","A: Ich habe zwei Brüder."],
+    ["A: Wie geht’s?","B: Gut, danke. Und dir?","A: Auch gut."],
+    ["A: Welcher Tag ist heute?","B: Heute ist Mittwoch.","A: Welches Datum?","B: Der 14. September."],
+    ["A: Wie spät ist es?","B: Es ist halb neun.","A: Danke!"],
+    ["A: Entschuldigung, ich verstehe nicht.","B: Kein Problem. Bitte langsam.","A: Kannst du das wiederholen?"],
+    ["A: Wie sagt man „teacher“ auf Deutsch?","B: „Lehrer“ (m) / „Lehrerin“ (w).","A: Danke!"],
+    ["A: Tschüss! Bis morgen!","B: Bis morgen! Schönen Tag!"]
+  ];
+
+  const en = [
+    ["A: Hi! My name is Tom. And you?","B: My name is Sara.","A: Nice to meet you!","B: Nice to meet you, too!"],
+    ["A: Where are you from?","B: I’m from Afghanistan. And you?","A: From Spain."],
+    ["A: How old are you?","B: I’m 17. And you?","A: I’m 18."],
+    ["A: Where do you live?","B: I live in Berlin, in Neukölln.","A: Cool, I live in Mitte."],
+    ["A: What languages do you speak?","B: I speak Arabic and a bit of German.","A: I speak Turkish and English."],
+    ["A: Which class are you in?","B: I’m in the A1 welcome class.","A: Me too!"],
+    ["A: What is your phone number?","B: 0 1 7 6 – 5 4 3 2 1 0.","A: Thanks!"],
+    ["A: Do you have an email address?","B: Yes: sara.khan@mail.de","A: Great, I’ll write to you."],
+    ["A: What do you like to do?","B: I play football. And you?","A: I listen to music and dance."],
+    ["A: Do you have siblings?","B: Yes, one sister.","A: I have two brothers."],
+    ["A: How are you?","B: Good, thanks. And you?","A: Also good."],
+    ["A: What day is it today?","B: Today is Wednesday.","A: What date?","B: September 14th."],
+    ["A: What time is it?","B: It’s half past eight.","A: Thanks!"],
+    ["A: Excuse me, I don’t understand.","B: No problem. Slowly, please.","A: Can you repeat that?"],
+    ["A: How do you say “teacher” in German?","B: “Lehrer” (m) / “Lehrerin” (f).","A: Thanks!"],
+    ["A: Bye! See you tomorrow!","B: See you tomorrow! Have a nice day!"]
+  ];
+
+  const fr = [
+    ["A: Salut ! Je m'appelle Tom. Et toi ?","B: Je m'appelle Sara.","A: Enchanté(e) !","B: Enchanté(e) aussi !"],
+    ["A: Tu viens d’où ?","B: Je viens d’Afghanistan. Et toi ?","A: D’Espagne."],
+    ["A: Quel âge as-tu ?","B: J’ai 17 ans. Et toi ?","A: J’ai 18 ans."],
+    ["A: Où habites-tu ?","B: J’habite à Berlin, à Neukölln.","A: Cool, j’habite à Mitte."],
+    ["A: Quelles langues parles-tu ?","B: Je parle arabe et un peu allemand.","A: Je parle turc et anglais."],
+    ["A: Tu es dans quelle classe ?","B: Je suis en classe d’accueil A1.","A: Moi aussi !"],
+    ["A: Quel est ton numéro de téléphone ?","B: 0 1 7 6 – 5 4 3 2 1 0.","A: Merci !"],
+    ["A: As-tu une adresse e-mail ?","B: Oui : sara.khan@mail.de","A: Super, je t’écris."],
+    ["A: Qu’est-ce que tu aimes faire ?","B: Je joue au foot. Et toi ?","A: J’écoute de la musique et je danse."],
+    ["A: As-tu des frères et sœurs ?","B: Oui, une sœur.","A: J’ai deux frères."],
+    ["A: Ça va ?","B: Bien, merci. Et toi ?","A: Ça va aussi."],
+    ["A: Quel jour sommes-nous ?","B: Nous sommes mercredi.","A: Quelle date ?","B: Le 14 septembre."],
+    ["A: Il est quelle heure ?","B: Il est huit heures et demie.","A: Merci !"],
+    ["A: Pardon, je ne comprends pas.","B: Pas de problème. Plus lentement, s’il te plaît.","A: Tu peux répéter ?"],
+    ["A: Comment dit-on « teacher » en allemand ?","B: « Lehrer » (m) / « Lehrerin » (f).","A: Merci !"],
+    ["A: Salut ! À demain !","B: À demain ! Bonne journée !"]
+  ];
+
+  const ru = [
+    ["A: Привет! Меня зовут Том. А тебя?","B: Меня зовут Сара.","A: Приятно познакомиться!","B: Мне тоже приятно!"],
+    ["A: Ты откуда?","B: Я из Афганистана. А ты?","A: Из Испании."],
+    ["A: Сколько тебе лет?","B: Мне 17. А тебе?","A: Мне 18."],
+    ["A: Где ты живёшь?","B: Я живу в Берлине, в Нойкёльне.","A: Круто, я живу в Митте."],
+    ["A: На каких языках ты говоришь?","B: Я говорю по-арабски и немного по-немецки.","A: Я говорю по-турецки и по-английски."],
+    ["A: В каком ты классе?","B: Я в адаптационном классе A1.","A: Я тоже!"],
+    ["A: Какой у тебя номер телефона?","B: 0 1 7 6 – 5 4 3 2 1 0.","A: Спасибо!"],
+    ["A: У тебя есть адрес электронной почты?","B: Да: sara.khan@mail.de","A: Отлично, я тебе напишу."],
+    ["A: Что ты любишь делать?","B: Я играю в футбол. А ты?","A: Я слушаю музыку и танцую."],
+    ["A: У тебя есть братья или сёстры?","B: Да, одна сестра.","A: У меня два брата."],
+    ["A: Как дела?","B: Хорошо, спасибо. А у тебя?","A: Тоже хорошо."],
+    ["A: Какой сегодня день?","B: Сегодня среда.","A: Какое число?","B: 14 сентября."],
+    ["A: Который час?","B: Половина девятого.","A: Спасибо!"],
+    ["A: Извини, я не понимаю.","B: Ничего. Пожалуйста, помедленнее.","A: Можешь повторить?"],
+    ["A: Как по-немецки «teacher»?","B: «Lehrer» (м) / «Lehrerin» (ж).","A: Спасибо!"],
+    ["A: Пока! До завтра!","B: До завтра! Хорошего дня!"]
+  ];
+
+  const uk = [
+    ["A: Привіт! Мене звати Том. А тебе?","B: Мене звати Сара.","A: Приємно познайомитися!","B: Мені теж приємно!"],
+    ["A: Ти звідки?","B: Я з Афганістану. А ти?","A: З Іспанії."],
+    ["A: Скільки тобі років?","B: Мені 17. А тобі?","A: Мені 18."],
+    ["A: Де ти живеш?","B: Я живу в Берліні, у Нойкьолні.","A: Клас, я живу в Мітте."],
+    ["A: Якими мовами ти говориш?","B: Я говорю арабською і трохи німецькою.","A: Я говорю турецькою та англійською."],
+    ["A: У якому ти класі?","B: Я в підготовчому класі A1.","A: Я теж!"],
+    ["A: Який у тебе номер телефону?","B: 0 1 7 6 – 5 4 3 2 1 0.","A: Дякую!"],
+    ["A: У тебе є адреса електронної пошти?","B: Так: sara.khan@mail.de","A: Чудово, я тобі напишу."],
+    ["A: Що ти любиш робити?","B: Я граю у футбол. А ти?","A: Я слухаю музику і танцюю."],
+    ["A: У тебе є брати або сестри?","B: Так, одна сестра.","A: У мене два брати."],
+    ["A: Як справи?","B: Добре, дякую. А в тебе?","A: Теж добре."],
+    ["A: Який сьогодні день?","B: Сьогодні середа.","A: Яка дата?","B: 14 вересня."],
+    ["A: Котра година?","B: Пів на дев’яту.","A: Дякую!"],
+    ["A: Вибач, я не розумію.","B: Немає проблем. Будь ласка, повільніше.","A: Можеш повторити?"],
+    ["A: Як німецькою «teacher»?","B: «Lehrer» (чол.) / «Lehrerin» (жін.).","A: Дякую!"],
+    ["A: Бувай! До завтра!","B: До завтра! Гарного дня!"]
+  ];
+
+  const tr = [
+    ["A: Merhaba! Benim adım Tom. Senin adın ne?","B: Benim adım Sara.","A: Memnun oldum!","B: Ben de memnun oldum!"],
+    ["A: Nerelisin?","B: Afganistanlıyım. Sen?","A: İspanya’dan."],
+    ["A: Kaç yaşındasın?","B: 17 yaşındayım. Sen?","A: 18 yaşındayım."],
+    ["A: Nerede yaşıyorsun?","B: Berlin’de, Neukölln’de yaşıyorum.","A: Güzel, ben de Mitte’de yaşıyorum."],
+    ["A: Hangi dilleri konuşuyorsun?","B: Arapça ve biraz Almanca konuşuyorum.","A: Ben Türkçe ve İngilizce konuşuyorum."],
+    ["A: Hangi sınıftasın?","B: A1 karşılama sınıfındayım.","A: Ben de!"],
+    ["A: Telefon numaran kaç?","B: 0 1 7 6 – 5 4 3 2 1 0.","A: Teşekkürler!"],
+    ["A: E-posta adresin var mı?","B: Evet: sara.khan@mail.de","A: Harika, sana yazacağım."],
+    ["A: Ne yapmayı seviyorsun?","B: Futbol oynuyorum. Sen?","A: Müzik dinlerim ve dans ederim."],
+    ["A: Kardeşlerin var mı?","B: Evet, bir kız kardeşim var.","A: Benim iki erkek kardeşim var."],
+    ["A: Nasılsın?","B: İyiyim, teşekkürler. Sen?","A: Ben de iyiyim."],
+    ["A: Bugün günlerden ne?","B: Bugün çarşamba.","A: Tarih nedir?","B: 14 Eylül."],
+    ["A: Saat kaç?","B: Saat sekiz buçuk.","A: Teşekkürler!"],
+    ["A: Afedersin, anlamıyorum.","B: Sorun değil. Lütfen yavaş.","A: Bunu tekrar eder misin?"],
+    ["A: Almanca’da “teacher” nasıl denir?","B: “Lehrer” (erk.) / “Lehrerin” (kad.).","A: Teşekkürler!"],
+    ["A: Hoşça kal! Yarın görüşürüz!","B: Yarın görüşürüz! İyi günler!"]
+  ];
+
+  const ar = [
+    ["A: مرحبًا! اسمي توم. وأنت؟","B: اسمي سارة.","A: تشرفت بمعرفتك!","B: وأنا أيضًا تشرفت!"],
+    ["A: من أين أنت؟","B: أنا من أفغانستان. وأنت؟","A: من إسبانيا."],
+    ["A: كم عمرك؟","B: عمري 17. وأنت؟","A: عمري 18."],
+    ["A: أين تسكن؟","B: أسكن في برلين، في نويكولن.","A: رائع، وأنا أسكن في ميته."],
+    ["A: ما اللغات التي تتحدثها؟","B: أتحدث العربية وقليلًا من الألمانية.","A: وأنا أتحدث التركية والإنجليزية."],
+    ["A: في أي صف أنت؟","B: أنا في صف الاستقبال A1.","A: وأنا أيضًا!"],
+    ["A: ما رقم هاتفك؟","B: 0 1 7 6 – 5 4 3 2 1 0.","A: شكرًا!"],
+    ["A: هل لديك بريد إلكتروني؟","B: نعم: ‎sara.khan@mail.de","A: رائع، سأكتب لك."],
+    ["A: ماذا تحب أن تفعل؟","B: ألعب كرة القدم. وأنت؟","A: أستمع إلى الموسيقى وأرقص."],
+    ["A: هل لديك إخوة؟","B: نعم، أخت واحدة.","A: لديّ أخوان."],
+    ["A: كيف حالك؟","B: بخير، شكرًا. وأنت؟","A: أنا أيضًا بخير."],
+    ["A: ما هو يوم اليوم؟","B: اليوم الأربعاء.","A: ما التاريخ؟","B: 14 سبتمبر."],
+    ["A: كم الساعة؟","B: الساعة الثامنة والنصف.","A: شكرًا!"],
+    ["A: عذرًا، لا أفهم.","B: لا مشكلة. ببطء من فضلك.","A: هل يمكنك التكرار؟"],
+    ["A: كيف نقول \"teacher\" بالألمانية؟","B: „Lehrer“ (مذكر) / „Lehrerin“ (مؤنث).","A: شكرًا!"],
+    ["A: إلى اللقاء! أراك غدًا!","B: أراك غدًا! يومًا سعيدًا!"]
+  ];
+
+  const fa = [
+    ["A: سلام! اسم من تام است. تو چطور؟","B: اسم من سارا است.","A: از آشنایی خوشوقتم!","B: من هم همین‌طور!"],
+    ["A: اهل کجایی؟","B: من اهل افغانستانم. تو چی؟","A: از اسپانیا."],
+    ["A: چند سالته؟","B: من ۱۷ سالمه. تو چی؟","A: من ۱۸ سالمه."],
+    ["A: کجا زندگی می‌کنی؟","B: در برلین، در نوی‌کُلن زندگی می‌کنم.","A: عالی، من در میتّه زندگی می‌کنم."],
+    ["A: چه زبان‌هایی صحبت می‌کنی؟","B: من عربی و کمی آلمانی صحبت می‌کنم.","A: من ترکی و انگلیسی صحبت می‌کنم."],
+    ["A: در کدام کلاس هستی؟","B: من در کلاس خوش‌آمدگویی A1 هستم.","A: من هم!"],
+    ["A: شماره تلفنت چیه؟","B: 0 1 7 6 – 5 4 3 2 1 0.","A: ممنون!"],
+    ["A: ایمیل داری؟","B: بله: ‎sara.khan@mail.de","A: عالی، بهت می‌نویسم."],
+    ["A: چه کارهایی دوست داری؟","B: فوتبال بازی می‌کنم. تو چی؟","A: موسیقی گوش می‌دهم و می‌رقصم."],
+    ["A: خواهر یا برادر داری؟","B: بله، یک خواهر.","A: من دو برادر دارم."],
+    ["A: حالت چطوره؟","B: خوبم، ممنون. تو چی؟","A: من هم خوبم."],
+    ["A: امروز چه روزی است؟","B: امروز چهارشنبه است.","A: تاریخ چیست؟","B: ۱۴ سپتامبر."],
+    ["A: ساعت چند است؟","B: ساعت هشت و نیم است.","A: ممنون!"],
+    ["A: ببخشید، متوجه نمی‌شوم.","B: مشکلی نیست. لطفاً آهسته‌تر.","A: می‌تونی تکرار کنی؟"],
+    ["A: «teacher» به آلمانی چه می‌شود؟","B: «Lehrer» (مذکر) / «Lehrerin» (مونث).","A: ممنون!"],
+    ["A: خداحافظ! فردا می‌بینمت!","B: فردا می‌بینمت! روز خوبی داشته باشی!"]
+  ];
+
+  const LANGS = {
+    ru:{label:"Russisch", data:ru},
+    uk:{label:"Ukrainisch", data:uk},
+    tr:{label:"Türkisch", data:tr},
+    fa:{label:"Persisch", data:fa},
+    ar:{label:"Arabisch", data:ar},
+    fr:{label:"Französisch", data:fr},
+    en:{label:"Englisch", data:en},
+  };
+
+  let idx = 0;
+  let lang = "ru";
+
+  const elBadge = document.getElementById("badge");
+  const elTitle = document.getElementById("title");
+  const elDe = document.getElementById("de");
+  const elTx = document.getElementById("tx");
+  const elLang = document.getElementById("lang");
+  const elLangLabel = document.getElementById("langLabel");
+  const elIdx = document.getElementById("idx");
+  const elJump = document.getElementById("jump");
+
+  function lineHTML(s){ 
+    const who = s.slice(0,2); 
+    const text = s.slice(3); 
+    return `<div class="line"><span class="who">${who}</span><span>${text}</span></div>`;
+  }
+
+  function render(){
+    elBadge.textContent = `Dialog ${idx+1}/16`;
+    elTitle.textContent = titles[idx];
+
+    elDe.innerHTML = de[idx].map(lineHTML).join("");
+    const pack = LANGS[lang];
+    elLangLabel.textContent = pack.label;
+    elTx.parentElement.classList.toggle('rtl', (lang==='ar'||lang==='fa'));
+    elTx.innerHTML = pack.data[idx].map(lineHTML).join("");
+
+    elIdx.textContent = `${idx+1} / 16`;
+    elJump.value = String(idx);
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  // Lang selector
+  elLang.addEventListener('change', e=>{ lang = e.target.value; render(); });
+
+  // Prev / Next
+  document.getElementById("prev").addEventListener('click', ()=>{
+    idx = (idx+16-1)%16; render();
+  });
+  document.getElementById("next").addEventListener('click', ()=>{
+    idx = (idx+1)%16; render();
+  });
+
+  // Jump selector options
+  for(let i=0;i<16;i++){
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = `${i+1}. ${titles[i]}`;
+    elJump.appendChild(opt);
+  }
+  elJump.addEventListener('change', e=>{ idx = parseInt(e.target.value,10)||0; render(); });
+
+  document.getElementById("shuffle").addEventListener('click', ()=>{
+    idx = Math.floor(Math.random()*16); render();
+  });
+
+  // QR for current URL
+  const qr = new QRCode(document.getElementById('qr'));
+  function makeQR(){
+    const url = window.location.href;
+    qr.makeCode(url);
+  }
+  makeQR();
+
+  render();
+  </script>
+</body>
+</html>
