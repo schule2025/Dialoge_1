@@ -11,6 +11,7 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:linear-gradient(180deg,#0b1020 0%,#0e1430 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+  .visually-hidden{position:absolute!important;left:-9999px!important}
   header{
     position:sticky;top:0;z-index:10;
     background:rgba(9,14,32,.7);backdrop-filter:blur(10px);
@@ -19,7 +20,7 @@
   .wrap{max-width:960px;margin:0 auto;padding:14px 16px}
   .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
   h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.2px}
-  .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .controls{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   select,button{
     background:var(--btn);color:var(--btn-ink);border:1px solid var(--line);
     border-radius:10px;padding:10px 12px;font-size:14px;cursor:pointer
@@ -39,19 +40,41 @@
     background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:12px;min-height:140px
   }
   .col h3{margin:0 0 6px;font-size:14px;color:var(--muted);font-weight:600;letter-spacing:.2px}
-  .line{display:flex;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.06);margin-bottom:8px}
+  .line{display:flex;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.06);margin-bottom:8px;font-size:16px}
   .who{font-weight:700;color:var(--accent)}
   .rtl{direction:rtl;text-align:right}
   .nav{display:flex;gap:8px;justify-content:space-between;align-items:center;margin:10px 4px 6px}
   .nav .left, .nav .right{display:flex;gap:8px;align-items:center}
   .ghost{background:transparent}
   .index{font-size:13px;color:var(--muted)}
-  .jump{width:96px}
+  .jump{width:120px;max-width:45vw}
   footer{color:var(--muted);text-align:center;padding:16px 0 26px;font-size:12px}
-  @media (max-width:780px){
-    .grid{grid-template-columns:1fr 1fr}
+
+  /* Vollbild-Fokusmodus */
+  body.fullscreen header,
+  body.fullscreen footer { display:none !important; }
+  body.fullscreen .card{
+    border-radius:0;border:none;margin:0;max-width:none;min-height:100svh;
+    box-shadow:none;padding:12px;
   }
-  @media (max-width:560px){
+  body.fullscreen .title{font-size:clamp(18px,4.5vw,28px)}
+  body.fullscreen .line{font-size:clamp(18px,4.3vw,26px);padding:10px 12px}
+  body.fullscreen .grid{gap:12px}
+  @media (max-width:520px){
+    body.fullscreen .grid{grid-template-columns:1fr}
+  }
+
+  /* Floating-Button zum Beenden des Vollbilds */
+  .fab{
+    position:fixed;right:14px;bottom:16px;z-index:20;display:none
+  }
+  body.fullscreen .fab{display:block}
+  .fab button{
+    background:#0f172a;border:1px solid #24324f;color:#e8edf7;border-radius:999px;
+    padding:12px 14px;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.35)
+  }
+
+  @media (max-width:780px){
     .grid{grid-template-columns:1fr 1fr}
     .qr{width:64px;height:64px}
   }
@@ -62,7 +85,7 @@
     <div class="wrap row">
       <h1>A1 Dialoge · Deutsch & Übersetzungen</h1>
       <div class="controls">
-        <label for="lang" class="visually-hidden" style="position:absolute;left:-9999px;">Sprache wählen</label>
+        <label for="lang" class="visually-hidden">Sprache wählen</label>
         <select id="lang" title="Übersetzungssprache wählen">
           <option value="ru">Russisch</option>
           <option value="uk">Ukrainisch</option>
@@ -72,6 +95,7 @@
           <option value="fr">Französisch</option>
           <option value="en">Englisch</option>
         </select>
+        <button id="fsToggle" title="Vollbild (F)">🖵 Vollbild</button>
         <div id="qr" class="qr" title="QR-Code zu dieser Seite"></div>
       </div>
     </div>
@@ -109,18 +133,21 @@
     </section>
   </main>
 
-  <footer>Tipp: Sprache oben wählen. Mit „Weiter“ den nächsten Dialog zeigen.</footer>
+  <footer>Tipp: Sprache oben wählen. Mit „Weiter“ den nächsten Dialog zeigen. Taste F = Vollbild, Esc = Beenden.</footer>
 
-  <!-- Minimal QRCode generator (QRCode.js embedded) -->
+  <!-- Vollbild beenden FAB -->
+  <div class="fab"><button id="fsExit">⤢ Vollbild beenden</button></div>
+
+  <!-- QR: einfacher Image-QR-Service -->
   <script>
-  /*! QRCode.js (minimal embed) – https://davidshimjs.github.io/qrcodejs/ (MIT) */
-  !function(o){function n(o){this.mode=s.MODE_8BIT_BYTE,this.data=o}function t(o,n){this.typeNumber=o,this.errorCorrectLevel=n,this.modules=null,this.moduleCount=0,this.dataCache=null,this.dataList=[]}var e=function(){var o=function(){var o=0,n=0;return{get:function(){return n+=1,o+=n},setInteger:function(n){o=n}}}(),n={};return n.PAD0=236,n.PAD1=17,n.createData=function(n,t,e){for(var r=a.getRSBlocks(n,t),i=new c,u=0;u<e.length;u++){var f=e[u];i.put(f.mode,4),i.put(f.getLength(),l.getLengthInBits(f.mode,n)),f.write(i)}for(var h=0,u=0;u<r.length;u++)h+=r[u].dataCount;if(i.getLengthInBits()>8*h)throw new Error("code length overflow. ("+i.getLengthInBits()+">"+8*h+")");for(i.getLengthInBits()+4<=8*h&&i.put(0,4);i.getLengthInBits()%8!=0;)i.putBit(!1);for(;!(i.getLengthInBits()>=8*h||(i.put(n.PAD0,8),i.getLengthInBits()>=8*h));)i.put(n.PAD1,8);return n.createBytes(i,r)},n.createBytes=function(o,n){for(var t=0,e=0,r=0,i=new Array(n.length),s=0;s<n.length;s++)i[s]=new f(n[s].totalCount,n[s].dataCount);for(var s=0;s<n.length;s++){for(var a=i[s],c=0;c<a.dataCount;c++)a.data[c]=255&o.buffer[c+t];t+=a.dataCount}for(var s=0;s<i.length;s++)for(var a=i[s],c=0;c<a.ecCount;c++)a.ec[c]=0;for(var s=0;s<i.length;s++){for(var a=i[s],c=0;c<a.ecCount;c++)a.ec[c]=0;for(var c=0;c<a.dataCount;c++)a.ec[c]^=a.data[c];for(var c=0;c<a.ecCount;c++)for(var u=1;u<a.ecCount;c++){}}
-  return{createData:n.createData}}();function r(o,n){this.totalCount=o,this.dataCount=n}function i(o,n){this.buffer=new Array,o&&(this.buffer=o),this.length=0,this.put=n}var s={};s.MODE_8BIT_BYTE=4;var a={getRSBlocks:function(o,n){var t=a.getRsBlockTable(o,n);if(void 0==t)throw new Error("bad rs block @ typeNumber:"+o+"/errorCorrectLevel:"+n);for(var e=t.length/3,r=[],i=0;i<e;i++)for(var s=t[3*i+0],c=t[3*i+1],u=t[3*i+2],f=0;f<c;f++)r.push(new r.constructor(s,u));return r},getRsBlockTable:function(o,n){switch(n){case 1:return a.RS_BLOCK_TABLE[4*(o-1)+0];case 0:return a.RS_BLOCK_TABLE[4*(o-1)+1];case 3:return a.RS_BLOCK_TABLE[4*(o-1)+2];case 2:return a.RS_BLOCK_TABLE[4*(o-1)+3];default:return void 0}},RS_BLOCK_TABLE:[
-  // trimmed table for brevity (using typeNumber auto below so we won't hit this)
-  ]};function c(){this.buffer=[],this.length=0}c.prototype={getLengthInBits:function(){return this.length},put:function(o,n){for(var t=0;t<n;t++)this.putBit((o>>n-t-1&1)==1)},putBit:function(o){var n=Math.floor(this.length/8);this.buffer.length<=n&&this.buffer.push(0),o&&(this.buffer[n]|=128>>>this.length%8),this.length++}};var l={getLengthInBits:function(o,n){return 8},};n.prototype={getLength:function(){return this.data.length},write:function(o){for(var n=0;n<this.data.length;n++)o.put(this.data.charCodeAt(n),8)}};
-  function u(e){this._el=e,this._htOption={width:80,height:80,correctLevel:0,text:""};this.makeCode=function(e){this._htOption.text=e;this._el.innerHTML="";var r=document.createElement("img");r.alt="QR",r.style.width="100%";r.src="https://api.qrserver.com/v1/create-qr-code/?size="+this._htOption.width+"x"+this._htOption.height+"&data="+encodeURIComponent(e);this._el.appendChild(r)}}
-  window.QRCode=u;
-  }();
+    function makeQR(el, url){
+      el.innerHTML = "";
+      const img = new Image();
+      img.alt = "QR";
+      img.style.width = "100%";
+      img.src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent(url);
+      el.appendChild(img);
+    }
   </script>
 
   <script>
@@ -303,10 +330,11 @@
   const elLangLabel = document.getElementById("langLabel");
   const elIdx = document.getElementById("idx");
   const elJump = document.getElementById("jump");
+  const elQr = document.getElementById("qr");
 
-  function lineHTML(s){ 
-    const who = s.slice(0,2); 
-    const text = s.slice(3); 
+  function lineHTML(s){
+    const who = s.slice(0,2);
+    const text = s.slice(3);
     return `<div class="line"><span class="who">${who}</span><span>${text}</span></div>`;
   }
 
@@ -325,7 +353,7 @@
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
-  // Lang selector
+  // Dropdown Sprache
   elLang.addEventListener('change', e=>{ lang = e.target.value; render(); });
 
   // Prev / Next
@@ -336,7 +364,7 @@
     idx = (idx+1)%16; render();
   });
 
-  // Jump selector options
+  // Direktwahl-Liste füllen
   for(let i=0;i<16;i++){
     const opt = document.createElement('option');
     opt.value = i; opt.textContent = `${i+1}. ${titles[i]}`;
@@ -348,13 +376,62 @@
     idx = Math.floor(Math.random()*16); render();
   });
 
-  // QR for current URL
-  const qr = new QRCode(document.getElementById('qr'));
-  function makeQR(){
-    const url = window.location.href;
-    qr.makeCode(url);
+  // Fester QR-Code-Link:
+  makeQR(elQr, 'https://schule2025.github.io/Dialoge_1/');
+
+  // Vollbild: Knopf, Taste F, Esc, FAB
+  const fsBtn = document.getElementById('fsToggle');
+  const fsExitBtn = document.getElementById('fsExit');
+
+  async function enterFullscreen(){
+    try{
+      document.body.classList.add('fullscreen');
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      }
+    }catch(e){
+      // Fallback: nur CSS-Klasse
+    }
   }
-  makeQR();
+  async function exitFullscreen(){
+    document.body.classList.remove('fullscreen');
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    }
+  }
+  fsBtn.addEventListener('click', ()=>{
+    if (document.body.classList.contains('fullscreen')) exitFullscreen();
+    else enterFullscreen();
+  });
+  fsExitBtn.addEventListener('click', exitFullscreen);
+  document.addEventListener('keydown', (e)=>{
+    if (e.key.toLowerCase()==='f') { e.preventDefault(); fsBtn.click(); }
+    if (e.key==='Escape') exitFullscreen();
+  });
+  document.addEventListener('fullscreenchange', ()=>{
+    if (!document.fullscreenElement) document.body.classList.remove('fullscreen');
+  });
+
+  // Wischgesten (mobil): links/rechts
+  let startX=null, startY=null, startTime=0;
+  const THRESHOLD=40, RESTRAINT=60, ALLOWEDTIME=500;
+  document.addEventListener('touchstart', (e)=>{
+    const t = e.changedTouches[0];
+    startX=t.pageX; startY=t.pageY; startTime=Date.now();
+  }, {passive:true});
+  document.addEventListener('touchend', (e)=>{
+    const t = e.changedTouches[0];
+    const distX = t.pageX - startX;
+    const distY = t.pageY - startY;
+    const elapsed = Date.now()-startTime;
+    if (elapsed<=ALLOWEDTIME && Math.abs(distX)>=THRESHOLD && Math.abs(distY)<=RESTRAINT){
+      if (distX<0){ // nach links wischen -> weiter
+        idx = (idx+1)%16; render();
+      }else{ // nach rechts -> zurück
+        idx = (idx+16-1)%16; render();
+      }
+    }
+  }, {passive:true});
 
   render();
   </script>
